@@ -2,7 +2,6 @@ package github.luthfipun.hiltmvi.ui.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,9 +9,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import github.luthfipun.hiltmvi.databinding.ActivityMainBinding
 import github.luthfipun.hiltmvi.domain.model.User
 import github.luthfipun.hiltmvi.domain.util.DataState
+import github.luthfipun.hiltmvi.domain.util.alert
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainAdapter.MainAdapterListener {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             layoutManager = GridLayoutManager(this@MainActivity, 2)
             adapter = mainAdapter
         }
+        mainAdapter.mainAdapterListener = this
     }
 
     private fun subscribeObservers(){
@@ -61,10 +62,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayError(message: String?){
-        Toast.makeText(this, message ?: "Unknown Errors", Toast.LENGTH_LONG).show()
+        binding.container.alert(message)
     }
 
     private fun displayData(users: List<User>){
         mainAdapter.addData(users)
+    }
+
+    override fun onItemTapped(user: User) {
+        binding.container.alert(user.id.toString())
     }
 }

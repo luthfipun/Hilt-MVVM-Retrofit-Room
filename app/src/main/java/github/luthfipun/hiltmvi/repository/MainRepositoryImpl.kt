@@ -21,8 +21,17 @@ class MainRepositoryImpl @Inject constructor(
 
         try {
             val getUser = remoteRepository.getUser()
-            emit(DataState.Success(getUser.map { it.toUser() }))
+            getUser.map { localRepository.saveUser(it.toUserCache()) } // cached to database
+
+            val userCache = localRepository.getUser() // get cache from database
+                .map { it.toUserDto() }
+
+            emit(DataState.Success(userCache))
         }catch (e: Exception){
+            val userCache = localRepository.getUser() // get cache from database
+                .map { it.toUserDto() }
+
+            emit(DataState.Success(userCache)) // get cache data if exceptions
             emit(DataState.Error(e))
         }
     }

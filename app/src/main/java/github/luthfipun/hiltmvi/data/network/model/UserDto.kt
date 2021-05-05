@@ -2,6 +2,7 @@ package github.luthfipun.hiltmvi.data.network.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import github.luthfipun.hiltmvi.data.database.model.UserCache
 import github.luthfipun.hiltmvi.domain.model.User
 
 data class UserDto(
@@ -29,5 +30,9 @@ data class UserDto(
         return User(
             id, email, firstName, lastName, avatar
         )
+    }
+
+    fun toUserCache(): UserCache {
+        return UserCache(id, email, firstName, lastName, avatar)
     }
 }
