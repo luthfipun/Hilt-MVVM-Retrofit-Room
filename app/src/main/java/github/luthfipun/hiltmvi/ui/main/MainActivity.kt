@@ -1,11 +1,11 @@
-package github.luthfipun.hiltmvi.ui
+package github.luthfipun.hiltmvi.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import github.luthfipun.hiltmvi.databinding.ActivityMainBinding
 import github.luthfipun.hiltmvi.domain.model.User
@@ -17,12 +17,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
+    private val mainAdapter = MainAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initView()
         subscribeObservers()
         viewModel.setStateEvent(MainStateEvent.GetUserEvents)
+    }
+
+    private fun initView() {
+        binding.recyclerView.apply {
+            hasFixedSize()
+            layoutManager = GridLayoutManager(this@MainActivity, 2)
+            adapter = mainAdapter
+        }
     }
 
     private fun subscribeObservers(){
@@ -54,8 +65,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayData(users: List<User>){
-        users.map {
-            Log.e("ENOG", it.email)
-        }
+        mainAdapter.addData(users)
     }
 }

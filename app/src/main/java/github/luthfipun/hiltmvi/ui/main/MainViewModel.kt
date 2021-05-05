@@ -1,4 +1,4 @@
-package github.luthfipun.hiltmvi.ui
+package github.luthfipun.hiltmvi.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
